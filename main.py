@@ -69,3 +69,24 @@ test_image_start_y = rand_h + padding
 random_base_coords = (test_image_start_x + crop_w / 2, test_image_start_y + crop_h / 2)
 randomly_rotated_im = subimage(base_im, random_base_coords, rand_theta, crop_w, crop_h)
 
+
+fig = figure(num=None, figsize=(12, 8), dpi=80, facecolor='w', edgecolor='k')
+ax = plt.gca()
+
+
+matcher = FeatureMatcher(10)
+[sub, kp1, scene, kp2, good, matchesMask, estimated_poly_lines] = matcher.match_features(base_im, randomly_rotated_im)
+
+
+scene = draw_angled_rec(random_base_coords[0], random_base_coords[1], crop_w, crop_h, rand_theta, base_im,
+                        (0, 0, 255,))  # GT
+scene = cv2.polylines(scene, estimated_poly_lines, True, 255, 3, cv2.LINE_AA) # Prediction
+
+draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
+                   singlePointColor=None,
+                   matchesMask=matchesMask,  # draw only inliers
+                   flags=2)
+
+img3 = cv2.drawMatches(sub, kp1, scene, kp2, good, None, **draw_params)
+
+plt.imshow(img3, 'gray'), plt.show()

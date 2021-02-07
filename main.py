@@ -26,7 +26,6 @@ def main():
                         help="Path of sub-image")
     args = parser.parse_args()
 
-
     try:
         # Init images
         base_im, sub_image, rand_theta, random_base_coords = init(args)
@@ -47,6 +46,7 @@ def main():
         if estimated_poly_lines is None:
             raise ValueError("Not enough matches are found - %d/%d" % (len(good), MIN_MATCH_COUNT))
         else:
+            scene_gt = base_im
             if args.random_flag:
                 # Plot ground truth of sub-images rectangle
                 scene_gt = draw_angled_rec(random_base_coords[0], random_base_coords[1], crop_w, crop_h, rand_theta,

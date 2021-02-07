@@ -69,6 +69,7 @@ def main():
 
             # Show result
             plt.imshow(img3, 'gray'), plt.show()
+            plt.imsave("results/result.png", img3)
 
     except Exception as e:
         print(e)

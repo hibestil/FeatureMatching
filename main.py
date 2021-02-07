@@ -8,6 +8,53 @@ from random import randrange
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 
+def main():
+    # Define colors
+    red_color = (255, 0, 0,)
+    blue_color = (0, 0, 255)
+
+    # Read the base image
+    image_path = "images/StarMap.png"
+    base_im = cv2.imread(image_path)
+
+    # Generate random rotated sub image for testing purposes.
+    crop_h = 200
+    crop_w = 200
+    padding = 200
+    randomly_rotated_im, rand_theta, random_base_coords = generate_random_sub_image(base_im, crop_h, crop_w, padding)
+
+    # Create figure
+    fig = figure(num=None, figsize=(12, 8), dpi=80, facecolor='w', edgecolor='k')
+    ax = plt.gca()
+
+    # Create a FeatureMatcher Object
+    MIN_MATCH_COUNT = 10
+    matcher = FeatureMatcher(MIN_MATCH_COUNT)
+
+    # Predict coordinates of given sub image in base image
+    result_arr = matcher.match_features(base_im, randomly_rotated_im)
+    [sub, kp1, scene, kp2, good, matchesMask, estimated_poly_lines] = result_arr
+
+    # Check if match counts enough
+    if estimated_poly_lines is None:
+        print("Not enough matches are found - %d/%d" % (len(good), MIN_MATCH_COUNT))
+    else:
+        # Plot ground truth of sub-images rectangle
+        scene_gt = draw_angled_rec(random_base_coords[0], random_base_coords[1], crop_w, crop_h, rand_theta, base_im, red_color)
+
+        # Plot predicted sub-images coordinates
+        scene_gt_pred = cv2.polylines(scene_gt, estimated_poly_lines, True, blue_color, 3, cv2.LINE_AA)  # Prediction
+
+        # Plot feature matcher related stuff
+        draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
+                           singlePointColor=None,
+                           matchesMask=matchesMask,  # draw only inliers
+                           flags=2)
+
+        img3 = cv2.drawMatches(sub, kp1, scene_gt_pred, kp2, good, None, **draw_params)
+
+        # Show result
+        plt.imshow(img3, 'gray'), plt.show()
 
 def subimage(image, center, theta, width, height):
     '''
@@ -63,48 +110,7 @@ def generate_random_sub_image(base_im, crop_h=200, crop_w=200, padding=200):
 
     return randomly_rotated_im, rand_theta, random_base_coords
 
+if __name__ == "__main__":
+    main()
 
-# Read the base image
-image_path = "images/StarMap.png"
-base_im = cv2.imread(image_path)
 
-# Generate random rotated sub image for testing purposes.
-crop_h = 200
-crop_w = 200
-padding = 200
-randomly_rotated_im, rand_theta, random_base_coords = generate_random_sub_image(base_im, crop_h, crop_w, padding)
-
-# Create figure
-fig = figure(num=None, figsize=(12, 8), dpi=80, facecolor='w', edgecolor='k')
-ax = plt.gca()
-
-# Create a FeatureMatcher Object
-MIN_MATCH_COUNT = 10
-matcher = FeatureMatcher(MIN_MATCH_COUNT)
-
-# Predict coordinates of given sub image in base image
-result_arr = matcher.match_features(base_im, randomly_rotated_im)
-[sub, kp1, scene, kp2, good, matchesMask, estimated_poly_lines] = result_arr
-
-# Check if match counts enough
-if estimated_poly_lines is None:
-    print("Not enough matches are found - %d/%d" % (len(good), MIN_MATCH_COUNT))
-else:
-    # Plot ground truth of sub-images rectangle
-    red_color = (255, 0, 0,)
-    scene_gt = draw_angled_rec(random_base_coords[0], random_base_coords[1], crop_w, crop_h, rand_theta, base_im, red_color)
-
-    # Plot predicted sub-images coordinates
-    blue_color = (0, 0, 255)
-    scene_gt_pred = cv2.polylines(scene_gt, estimated_poly_lines, True, blue_color, 3, cv2.LINE_AA)  # Prediction
-
-    # Plot feature matcher related stuff
-    draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
-                       singlePointColor=None,
-                       matchesMask=matchesMask,  # draw only inliers
-                       flags=2)
-
-    img3 = cv2.drawMatches(sub, kp1, scene_gt_pred, kp2, good, None, **draw_params)
-
-    # Show result
-    plt.imshow(img3, 'gray'), plt.show()

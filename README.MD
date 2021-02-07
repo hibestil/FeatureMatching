@@ -15,15 +15,15 @@ $ docker-compose up -d --build
 ```
 
 ### With your own environment
-```shell
-pip install -r requirements.txt
+```sh
+$ pip install -r requirements.txt
 ```
 
 To use with existing images
-```shell
-python main.py --base_image_path=images/StarMap.png --sub_image_path=images/Small_area.png
+```sh
+$ python main.py --base_image_path=images/StarMap.png --sub_image_path=images/Small_area.png
 ```
 Generate random sub images from base and predict their coordinates
-```shell
-python main.py --base_image_path=images/StarMap.png --random_flag=True
+```sh
+$ python main.py --base_image_path=images/StarMap.png --random_flag=True
 ```

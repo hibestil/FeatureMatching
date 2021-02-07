@@ -1,0 +1,5 @@
+matplotlib==2.2.2
+numpy==1.16.4
+opencv-contrib-python==4.5.1.48
+opencv-python==3.4.2.17
+openpyxl==2.6.1

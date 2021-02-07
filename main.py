@@ -35,8 +35,8 @@ def main():
         ax = plt.gca()
 
         # Create a FeatureMatcher Object
-        MIN_MATCH_COUNT = 10
-        matcher = FeatureMatcher(MIN_MATCH_COUNT)
+        min_match_count = 10
+        matcher = FeatureMatcher(min_match_count)
 
         # Predict coordinates of given sub image in base image
         result_arr = matcher.match_features(base_im, sub_image)
@@ -44,7 +44,7 @@ def main():
 
         # Check if match counts enough
         if estimated_poly_lines is None:
-            raise ValueError("Not enough matches are found - %d/%d" % (len(good), MIN_MATCH_COUNT))
+            raise ValueError("Not enough matches are found - %d/%d" % (len(good), min_match_count))
         else:
             scene_gt = base_im
             if args.random_flag:

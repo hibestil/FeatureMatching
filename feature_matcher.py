@@ -38,7 +38,7 @@ class FeatureMatcher():
             dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
 
             M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
-            matchesMask = mask.ravel().tolist()
+            matches_mask = mask.ravel().tolist()
 
             h, w = sub.shape
             pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
@@ -47,10 +47,9 @@ class FeatureMatcher():
             estimated_poly_lines = [np.int32(dst)]
 
         else:
-            print("Not enough matches are found - %d/%d" % (len(good), self.MIN_MATCH_COUNT))
-            matchesMask = None
+            matches_mask = None
             estimated_poly_lines = None
 
-        return [sub, kp1, scene, kp2, good, matchesMask, estimated_poly_lines]
+        return [sub, kp1, scene, kp2, good, matches_mask, estimated_poly_lines]
 
 

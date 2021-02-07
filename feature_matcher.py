@@ -51,5 +51,3 @@ class FeatureMatcher():
             estimated_poly_lines = None
 
         return [sub, kp1, scene, kp2, good, matches_mask, estimated_poly_lines]
-
-

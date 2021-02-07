@@ -1,13 +1,15 @@
 """
 @Author : Halil İbrahim Bestil
 """
-import cv2
+import argparse
 import math
-from feature_matcher import FeatureMatcher
 from random import randrange
+
+import cv2
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
-import argparse
+
+from feature_matcher import FeatureMatcher
 
 # Define colors
 red_color = (255, 0, 0,)
@@ -15,6 +17,7 @@ blue_color = (0, 0, 255)
 crop_h = 200
 crop_w = 200
 padding = 200
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -53,7 +56,8 @@ def main():
                                            base_im, red_color)
 
             # Plot predicted sub-images coordinates
-            scene_gt_pred = cv2.polylines(scene_gt, estimated_poly_lines, True, blue_color, 3, cv2.LINE_AA)  # Prediction
+            scene_gt_pred = cv2.polylines(scene_gt, estimated_poly_lines, True, blue_color, 3,
+                                          cv2.LINE_AA)  # Prediction
 
             # Plot feature matcher related stuff
             draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color

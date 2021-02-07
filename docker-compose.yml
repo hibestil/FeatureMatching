@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+
+  feature_matching:
+    restart: on-failure
+    build: .
+    command: python main.py --base_image_path=images/StarMap.png --random_flag=True
+
+

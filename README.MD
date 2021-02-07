@@ -7,6 +7,13 @@
 ![Example 1](examples/img_5.png)
 
 ## Usage
+## Via Docker Compose
+Build the image and run the container:
+
+```sh
+$ docker-compose up -d --build
+```
+
 ### With your own environment
 ```shell
 pip install -r requirements.txt

@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-class FeatureMatcher():
+class FeatureMatcher:
 
     def __init__(self, min_match_count=10):
         self.MIN_MATCH_COUNT = min_match_count
